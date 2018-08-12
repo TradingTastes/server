@@ -39,7 +39,7 @@ passport.use(
     //FACEBOOK STRATEGY METHOD
       new FacebookStrategy(
         {
-          clientID: keys.faebookClientID,
+          clientID: keys.facebookClientID,
           clientSecret: keys.facebookClientSecret,
           callbackURL: '/auth/facebook/callback',
           proxy: true
