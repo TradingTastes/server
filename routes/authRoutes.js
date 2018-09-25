@@ -29,6 +29,15 @@ module.exports = app => {
     }
   );
 
+  // app.get('/Register', (req, res) => {
+  //   console.log("Hi");
+  //   res.send({Hi: "there"});
+  // })
+  //
+  // app.post('api/register', (req, res) => {
+  //   console.log("register", req.body);
+  // });
+
 
   app.get('/api/logout', (req, res) => {
     req.logout();
@@ -38,4 +47,11 @@ module.exports = app => {
   app.get('/api/current_user', (req, res) => {
     res.send(req.user);
   });
+
+
+  app.post('/login',
+    passport.authenticate('local', { failureRedirect: '/login' }),
+    function(req, res) {
+      res.redirect('/');
+    });
 };

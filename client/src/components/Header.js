@@ -14,26 +14,31 @@ class Header extends Component {
     }
   }
 
+
+
+  // <ul>
+  //   {this.renderContent()}
+  // </ul>
+
   render() {
     return (
-      <nav class="teal lighten-3">
+      <div>
+      <nav className="teal lighten-3">
         <div className="nav-wrapper">
           <Link
-            to={this.props.auth ? '/surveys' : '/'}
-            className="left brand-logo"
-          >
-          Trading Tastes
+            to={this.props.auth ? '/main' : '/'}
+            className="left brand-logo">
+            Trading Tastes
           </Link>
-          <ul className="right">
-            {this.renderContent()}
-          </ul>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="sass.html">Find Food</a></li>
-            <li><a href="badges.html">Make Food </a></li>
-            <li><a href="collapsible.html"></a></li>
+          <ul id="nav-mobile" className="right hide-on-med-and-down">
+            <li><a href="/Trade">FIND FOOD</a></li>
+            <li><a href="/Kitchen">Build Your Kitchen</a></li>
+            <li><Link to={'/Sign'}>SIGN IN</Link></li>
+            <li><a href="/api/logout">SIGN OUT </a></li>
           </ul>
         </div>
       </nav>
+      </div>
     );
   }
 }

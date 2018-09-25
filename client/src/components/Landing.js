@@ -1,133 +1,97 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import {registerUser} from '../actions/register';
 import { connect } from 'react-redux';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Redirect,
-  withRouter
-} from "react-router-dom";
 
-////////////////////////////////////////////////////////////
-// 1. Click the public page
-// 2. Click the protected page
-// 3. Log in
-// 4. Click the back button, note the URL each time
 
-const Landing = () => (
-  <Router>
-    <div>
-      <AuthButton />
-      <ul>
-        <li>
-          <Link to="/public">Public Page</Link>
-        </li>
-        <li>
-          <Link to="/protected">Protected Page</Link>
-        </li>
-      </ul>
-      <Route path="/public" component={Public} />
-      <Route path="/login" component={Login} />
-      <PrivateRoute path="/protected" component={Protected} />
-    </div>
-  </Router>
-);
-
-const fakeAuth = {
-  isAuthenticated: false,
-  authenticate(cb) {
-    this.isAuthenticated = true;
-    setTimeout(cb, 100); // fake async
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
   },
-  signout(cb) {
-    this.isAuthenticated = false;
-    setTimeout(cb, 100);
-  }
-};
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  menu: {
+    width: 200,
+  },
+});
 
-const AuthButton = withRouter(
-  ({ history }) =>
-    fakeAuth.isAuthenticated ? (
-      <p>
-        Welcome!{" Ahmed"}
-        <button
-          onClick={() => {
-            fakeAuth.signout(() => history.push("/"));
-          }}
-        >
-          Sign out
-        </button>
-      </p>
-    ) : (
-      <p>You are not logged in.</p>
-    )
-);
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      fakeAuth.isAuthenticated ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: "/login",
-            state: { from: props.location }
-          }}
-        />
-      )
-    }
-  />
-);
+class RegisterForm extends React.Component {
 
-const Public = () => <h3>Public</h3>;
-const Protected = () => <h3>Protected</h3>;
-
-class Login extends React.Component {
   state = {
-    redirectToReferrer: false
+    username: '',
+    password: ''
   };
 
-  login = () => {
-    fakeAuth.authenticate(() => {
-      this.setState({ redirectToReferrer: true });
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
     });
   };
 
-  render() {
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
-    const { redirectToReferrer } = this.state;
+  onSubmit = (e) => {
+    e.preventDefault();
+    console.log("values", this.state);
+    var values = {
+      username: this.state.username,
+    };
+    this.props.registerUser(values);
+  }
 
-    if (redirectToReferrer) {
-      return <Redirect to={from} />;
-    }
+  render() {
+
+    const { classes } = this.props;
 
     return (
       <div>
-        <p>You must log in to view the page at {from.pathname}</p>
-        <button onClick={this.login}>Log in</button>
-      </div>
+      <h2> Register </h2>
+      <form className={classes.container} onSubmit={this.onSubmit} noValidate autoComplete="off">
+        <TextField
+          id="name"
+          label="Name"
+          className={classes.textField}
+          value={this.state.name}
+          onChange={this.handleChange('name')}
+          margin="normal"
+        />
+        <TextField
+          id="password"
+          label="Password"
+          className={classes.textField}
+          value={this.state.password}
+          onChange={this.handleChange('password')}
+          type="password"
+          autoComplete="password"
+          margin="normal"
+        />
+        <Button type="submit" variant="contained"  onClick={this.onSubmit} color="primary" className={classes.button}>
+        Submit
+      </Button>
+        </form>
+        </div>
+
     );
   }
 }
 
-export default Landing;
+  RegisterForm.propTypes = {
+    classes: PropTypes.object.isRequired,
+    registerUser: PropTypes.func.isRequired
+  };
 
 
 
+const mapDispatchToProps = (dispatch) => ({
+  registerUser: (values) => dispatch(registerUser(values))
+});
 
-//
-//
-//
-// const Landing = () => {
-//   return (
-//     <div style={{ textAlign: 'center' }}>
-//       <h1>
-//         TradingTastes!
-//       </h1>
-//       <a href="/auth/facebook">Login With Facebook</a> <br/>
-//       <a href="/auth/google">Login With Google</a>
-//     </div>
-//   );
-// };
+// export default withStyles(styles)(RegisterForm);
+export default withStyles(styles)(connect(null, mapDispatchToProps)(RegisterForm));

@@ -6,8 +6,10 @@ import * as actions from '../actions';
 import Header from './Header';
 import Landing from './Landing';
 import Dashboard from'./Dashboard';
-const SurveyNew = () => <h2>SurveyNew</h2>
-
+import Sign from './Sign';
+import Trade from './Trade';
+import Kitchen from './Kitchen';
+import Register from './RegisterReduxForm';
 
 class App extends Component {
   componentDidMount() {
@@ -20,9 +22,13 @@ class App extends Component {
         <BrowserRouter>
           <div>
             <Header />
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/surveys" component={Dashboard} />
-            <Route path="/surveys/new" component={SurveyNew} />
+            <Route exact path="/main" component={Dashboard} />
+            <Route exact path="/Sign" component={Sign} />
+            <Route exact path="/register_user" component={Landing} />
+            <Route exact path="/trade" component={Trade} />
+            <Route exact path="/kitchen" component={Kitchen} />
+
+
 
           </div>
         </BrowserRouter>
